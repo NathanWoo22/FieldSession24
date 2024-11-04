@@ -7,3 +7,7 @@ RUN apt-get install -y build-essential
 
 RUN pip3 install --upgrade pip
 RUN pip3 install open3d
+RUN pip3 install numpy
+
+
+CMD bash setup.bash
