@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  icp_algorithm:
+    image: pdc-icp  # Replace with the name of the Docker image for your ICP algorithm
+    volumes:
+      - ./docker-compose.yaml:/
+      - ./Dockerfile:/Dockerfile
+      - ./datasets:/datasets  # Links the local 'datasets' folder to '/datasets' in the container
+    command: ["./run.sh"]  # Replace with the command to run the ICP algorithm
