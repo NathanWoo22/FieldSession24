@@ -62,11 +62,13 @@ def generate_simple_translation_test():
     data_xyz = template_copy[:, :3]
     template_xyz = template[:, :3]
 
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_easy.pcd", template_copy, write_ascii=True)
+    np.savetxt("tests/translation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    #return template_xyz, data_xyz, initial_transform
 
 def generate_simple_translation_rotation_test():
 
@@ -88,11 +90,13 @@ def generate_simple_translation_rotation_test():
     data_xyz = template_copy[:, :3]
     template_xyz = template[:, :3]
 
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_rotation_easy.pcd", template_copy, write_ascii=True)
+    np.savetxt("tests/translation_rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    #return template_xyz, data_xyz, initial_transform
 
 def generate_rotation_translation_with_noise_test():
 
@@ -121,8 +125,10 @@ def generate_rotation_translation_with_noise_test():
     data_xyz = noisy_pcd[:, :3]
     template_xyz = template[:, :3]
 
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_rotation_easy.pcd", noisy_pcd, write_ascii=True)
+    np.savetxt("tests/translation_rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    #return template_xyz, data_xyz, initial_transform
