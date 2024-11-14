@@ -22,8 +22,8 @@ def icp(template_np, source_np):
     [0, -1, 0, 0.05],  
     [1, 0, 0, 1.4],  
     [0, 0, 1, 0.22], 
-    [0, 0, 0, 1]
-])
+    [0, 0, 0, 1]])
+    
     threshold = 0.001
     # # Perform ICP registration
     # reg_result = o3d.pipelines.registration.registration_icp(

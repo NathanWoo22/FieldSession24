@@ -25,15 +25,10 @@ def icp(template_np, source_np):
 
     scene.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamKNN(knn=10))
     template.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamKNN(knn=10))
-
-
-    # Compute FPFH features for both clouds
     radius_feature = voxel_size * 5
-
     scene_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
         scene, o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100)
     )
-
     template_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
         template, o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=100)
     )
@@ -57,7 +52,6 @@ def icp(template_np, source_np):
     print("RANSAC Transformation:\n", ransac_result.transformation)
     correspondences = ransac_result.correspondence_set
     print("Number of correspondences:", len(correspondences))
-
     # ICP for fine alignment
     icp_result = o3d.pipelines.registration.registration_icp(
         template, scene, distance_threshold, ransac_result.transformation,
@@ -65,11 +59,8 @@ def icp(template_np, source_np):
     )
 
     print("ICP Transformation:\n", icp_result.transformation)
-
     # Apply the final transformation to the template for visualization
     template.transform(icp_result.transformation)
-
-    # Visualize the aligned point clouds
     o3d.visualization.draw_geometries([scene, template])
     print(icp_result)
     print("Transformation is:")

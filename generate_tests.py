@@ -14,6 +14,7 @@ import copy
 
 # template_copy.voxel_down_sample(voxel_size)
 
+
 def generate_simple_rotation_test():
 
     template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
@@ -29,16 +30,17 @@ def generate_simple_rotation_test():
     template_copy.transform(initial_transform)
 
     template_transformed_np = np.asarray(template_copy.points)
-    template_copy.write_point_cloud()
 
-    data_xyz = template_copy[:, :3]
-    template_xyz = template[:, :3]
-
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/rotation_easy.pcd", template_copy, write_ascii=True)
+    np.savetxt("tests/rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    # return template_xyz, data_xyz, initial_transform
+
+generate_simple_rotation_test()
+
 
 def generate_simple_translation_test():
 
