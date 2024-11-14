@@ -15,8 +15,9 @@ xhost +local:docker >> /dev/null
 docker compose -f $compose_filepath up -d
 trap 'control_c' SIGINT
 
-#DO stuff
-docker exec $container_name rviz2
+# Do stuff
+docker exec $container_name echo why
+docker exec $container_name ls
 
 # Stop docker container
 docker compose -f $compose_filepath down

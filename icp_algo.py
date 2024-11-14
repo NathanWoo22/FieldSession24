@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.spatial import KDTree
 
-def icp(template_cloud, larger_cloud, max_iterations=100, tolerance=1e-20):
+def icp(template_cloud, larger_cloud, max_iterations=100, tolerance=0.01):
     
     def find_closest_points(source, target):
         kdtree = KDTree(target)
@@ -57,7 +57,7 @@ def icp(template_cloud, larger_cloud, max_iterations=100, tolerance=1e-20):
         error = np.mean(np.linalg.norm(template_cloud - closest_points, axis=1)**2)
         
         if np.abs(prev_error - error) < tolerance:
-            print(f"iterations: {i}")
+            print(f"iterations: {i}, {prev_error - error}")
             break
         prev_error = error
         print(transformation)

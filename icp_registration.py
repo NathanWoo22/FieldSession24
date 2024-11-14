@@ -24,7 +24,7 @@ def icp(template_np, source_np):
     [0, 0, 1, 0.22], 
     [0, 0, 0, 1]
 ])
-    threshold = 10
+    threshold = 0.001
     # # Perform ICP registration
     # reg_result = o3d.pipelines.registration.registration_icp(
     #     template_pc, target_pc, threshold, initial_transform,
@@ -35,7 +35,8 @@ def icp(template_np, source_np):
     print("Apply point-to-point ICP")
     reg_p2p = o3d.pipelines.registration.registration_icp(
         source, target, threshold, initial_transform,
-        o3d.pipelines.registration.TransformationEstimationPointToPoint())
+        o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+        o3d.pipelines.registration.ICPConvergenceCriteria(max_iteration=2000))
     print(reg_p2p)
     print("Transformation is:")
     print(reg_p2p.transformation)
