@@ -91,3 +91,36 @@ def generate_simple_translation_rotation_test():
     o3d.visualization.draw_geometries([template, template_copy])
 
     return template_xyz, data_xyz, initial_transform
+
+def generate_rotation_translation_with_noise_test():
+
+    template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+
+    template_copy = copy.deepcopy(template)
+
+    initial_transform = np.array([
+        [0, 1, 0, 0],  
+        [1, 0, 0, 0],  
+        [0, 0, 1, 0], 
+        [0, 0, 0, 1]])
+
+    template_copy.transform(initial_transform)
+
+    points = np.asarray(template.points)
+    noise = np.random.normal(0, noise_std_dev = 0.01, points.shape)
+    noisy_points = points + noise
+
+    template_transformed_np = np.asarray(template_copy.points)
+    template_copy.write_point_cloud()
+
+    noisy_pcd = o3d.geometry.PointCloud()
+    noisy_pcd.points = o3d.utility.Vector3dVector(noisy_points)
+
+    data_xyz = noisy_pcd[:, :3]
+    template_xyz = template[:, :3]
+
+    #matrix_inv = np.linalg.inv(initial_transform)
+
+    o3d.visualization.draw_geometries([template, template_copy])
+
+    return template_xyz, data_xyz, initial_transform
