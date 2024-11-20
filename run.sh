@@ -5,8 +5,11 @@ docker run -it \
  -v ~/.Xauthority:/root/.Xauthority:ro \
  -v ./scripts:/scripts:z \
  -v ./datasets:/datasets:z \
+ -v ./read_pcd.py:/read_pcd.py \
+ -v ./icp_registration.py:/icp_registration.py \
+ -v ./icp_algo.py:/icp_algo.py \
+ -v ./convert_pcd.py:/convert_pcd.py \
  --net=host \
  --rm \
  --cap-add=NET_ADMIN \
- #icp-pcd:latest
-  stratominc.azurecr.io/stratom_base:ubuntu22.04-humble-cuda
+ fieldsession:latest
