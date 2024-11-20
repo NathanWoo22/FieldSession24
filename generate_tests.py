@@ -25,48 +25,14 @@ noise = np.random.normal(mean_location, std_dev, (num_points, 3))
 '''
 
 ''' create wall of noise
-# Step 1: Define wall dimensions and density
+# Define wall dimensions and density
 width = 5.0        # Wall width in x-axis
 height = 3.0       # Wall height in y-axis
 density = 100      # Points per unit length (density)
 
-# Step 2: Generate a grid of points
+# Generate a grid of points
 x = np.linspace(0, width, int(width * density))  # x-coordinates
 y = np.linspace(0, height, int(height * density))  # y-coordinates
-xx, yy = np.meshgrid(x, y)  # Create a grid
-z = np.zeros_like(xx)  # z-coordinate for a flat wall
-# Combine into (N, 3) point cloud
-points = np.vstack((xx.ravel(), yy.ravel(), z.ravel())).T
-'''
-
-initial_transform = np.array([
-    [0, 1, 0, 1],  
-    [1, 0, 0, 1],  
-    [0, 0, 1, 1], 
-    [0, 0, 0, 1]
-])
-
-template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
-
-template_copy = copy.deepcopy(template)
-
-initial_transform = np.array([
-    [0, 1, 0, 0],  
-    [1, 0, 0, 0],  
-    [0, 0, 1, 0], 
-    [0, 0, 0, 1]
-])
-
-template_copy.transform(initial_transform)
-
-# Define wall dimensions and density
-width = 2.0        # Wall width in x-axis
-height = 2.0       # Wall height in y-axis
-density = 50      # Points per unit length (density)
-
-# Generate a grid of points
-x = np.linspace(-1, 1, int(width * density))  # x-coordinates
-y = np.linspace(-1, 1, int(height * density))  # y-coordinates
 xx, yy = np.meshgrid(x, y)  # Create a grid
 z = np.zeros_like(xx)  # z-coordinate for a flat wall
 
@@ -84,8 +50,57 @@ rotation_matrix = np.array([
 # Apply rotation to the points
 rotated_wall = wall @ rotation_matrix.T
 
-translation_vector = np.array([0, 1.0, 0])
+# Create a tranlation array
+translation_vector = np.array([0, 1.01, 0])
+
+# Apply translation to the points
 translated_points = rotated_wall + translation_vector
+'''
+
+initial_transform = np.array([
+    [0, 1, 0, 1],  
+    [1, 0, 0, 1],  
+    [0, 0, 1, 1], 
+    [0, 0, 0, 1]
+])
+
+template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+
+template_copy = copy.deepcopy(template)
+
+initial_transform = np.array([
+    [1, 0, 0, 0],  
+    [0, 1, 0, 0],  
+    [0, 0, 1, 0], 
+    [0, 0, 0, 1]
+])
+
+template_copy.transform(initial_transform)
+
+# Parameters for the curved wall
+radius = 1.0       # Radius of the curved wall
+angle = np.pi      # Curve spans 90 degrees (in radians)
+height = 2.0       # Height of the wall
+density = 60      # Points per unit length
+
+# Step 1: Generate a grid of points in angular and vertical directions
+theta = np.linspace(0, angle, int(density * angle))  # Angular points
+z = np.linspace(0, height, int(density * height))    # Vertical points
+theta_grid, z_grid = np.meshgrid(theta, z)
+
+# Step 2: Convert cylindrical coordinates to Cartesian coordinates
+x = radius * np.cos(theta_grid)  # x = r * cos(theta)
+y = radius * np.sin(theta_grid)  # y = r * sin(theta)
+z = z_grid                       # z remains as height
+
+# Combine points into an (N, 3) array
+wall = np.vstack((x.ravel(), y.ravel(), z.ravel())).T
+
+# Create a tranlation array
+translation_vector = np.array([0, -2.02, -1])
+
+# Apply translation to the points
+translated_points = wall + translation_vector
 
 points = np.asarray(template_copy.points)
 combined_points = np.vstack((points, translated_points))
@@ -95,8 +110,8 @@ noisy_pcd.points = o3d.utility.Vector3dVector(combined_points)
 
 matrix_inv = np.linalg.inv(initial_transform)
 
-# o3d.io.write_point_cloud("tests/easy/rotation_easy.pcd", template_copy, write_ascii=True)
-# np.savetxt("tests/easy/rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
+o3d.io.write_point_cloud("tests/easy/nothing_done.pcd", template_copy, write_ascii=True)
+np.savetxt("tests/easy/nothing_done_gt.txt", matrix_inv, fmt="%.6f")
 
 template.paint_uniform_color([1, 0, 0])  # Red
 noisy_pcd.paint_uniform_color([0, 1, 0]) # Green

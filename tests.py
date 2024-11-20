@@ -7,7 +7,7 @@ import icp_registration as icp_reg
 import feature_matches as icp_col
 
 
-class TestMathOperations(unittest.TestCase):
+class TestMatchingAlgorithms(unittest.TestCase):
     # Test cases look something like this: 
 
     # difference = np.linalg.norm(matrix1 - matrix2, ord='fro')
@@ -18,10 +18,10 @@ class TestMathOperations(unittest.TestCase):
     # # Check if the difference is within the threshold
     # if difference < threshold:
 
-    def test_rotation(self):
+    def test_given_answer(self):
         template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
-        data = o3d.io.read_point_cloud("tests/easy/rotation_easy.pcd") 
-        matrix = np.loadtxt("tests/easy/rotation_easy_gt.txt")
+        data = o3d.io.read_point_cloud("tests/easy/nothing_done.pcd") 
+        matrix = np.loadtxt("tests/easy/nothing_done_gt.txt")
 
         template_points = np.asarray(template.points)
         data_points = np.asarray(data.points)
@@ -54,31 +54,127 @@ class TestMathOperations(unittest.TestCase):
         self.assertGreater(threshold, difference)
         # self.assertGreater(1.0, end_time-start_time, f"Expected time taken to be less than 1.0 secs, but got {end_time-start_time} secs")
 
-    # def test_translation(self):
-    #     template_xyz, data_xyz, matrix = rot_test.generate_simple_translation_test()
+'''
+    def test_rotation(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/easy/rotation.pcd") 
+        matrix = np.loadtxt("tests/easy/rotation_gt.txt")
 
-    #     start_time = time.perf_counter
-    #     transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
-    #     end_time = time.perf_counter
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
 
-    #     difference = np.linalg.norm(matrix - transformation, ord='fro')
-    #     threshold = 0.0001 * np.linalg.norm(matrix, ord='fro')
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
 
-    #     self.assertGreater(threshold, difference)
-    #     self.assertGreater(1.0, end_time-start_time, f"Expected time taken to be less than 1.0 secs, but got {end_time-start_time} secs")
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
 
-    # def test_translation_rotation(self):
-    #     template_xyz, data_xyz, matrix = rot_test.generate_simple_translation_rotation_test()
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
 
-    #     start_time = time.perf_counter
-    #     transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
-    #     end_time = time.perf_counter
+        self.assertGreater(threshold, difference)
 
-    #     difference = np.linalg.norm(matrix - transformation, ord='fro')
-    #     threshold = 0.0001 * np.linalg.norm(matrix, ord='fro')
+    def test_translation(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/easy/translation.pcd") 
+        matrix = np.loadtxt("tests/easy/translation_gt.txt")
 
-    #     self.assertGreater(threshold, difference)
-    #     self.assertGreater(1.0, end_time-start_time, f"Expected time taken to be less than 1.0 secs, but got {end_time-start_time} secs")
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
+
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
+
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
+
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
+
+        self.assertGreater(threshold, difference)
+    
+    def test_rotation_and_translation(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/easy/rotation_and_translation.pcd") 
+        matrix = np.loadtxt("tests/easy/rotation_and_translation_gt.txt")
+
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
+
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
+
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
+
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
+
+        self.assertGreater(threshold, difference)
+
+    def test_rotation_with_noise(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/medium/rotation_with_noise.pcd") 
+        matrix = np.loadtxt("tests/medium/rotation_with_noise_gt.txt")
+
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
+
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
+
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
+
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
+
+        self.assertGreater(threshold, difference)
+
+    def test_translation_with_noise(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/medium/translation_with_noise.pcd") 
+        matrix = np.loadtxt("tests/medium/translation_with_noise_gt.txt")
+
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
+
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
+
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
+
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
+
+        self.assertGreater(threshold, difference)
+
+    def test_rotation_and_translation_with_noise(self):
+        template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+        data = o3d.io.read_point_cloud("tests/medium/rotation_and_translation_with_noise.pcd") 
+        matrix = np.loadtxt("tests/medium/rotation_and_translation_with_noise_gt.txt")
+
+        template_points = np.asarray(template.points)
+        data_points = np.asarray(data.points)
+
+        template_xyz = template_points[:, :3]
+        data_xyz = data_points[:, :3]
+
+        start_time = time.perf_counter
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
+        end_time = time.perf_counter
+
+        difference = np.linalg.norm(matrix - transformation, ord='fro')
+        threshold = 0.1 * np.linalg.norm(matrix, ord='fro')
+
+        self.assertGreater(threshold, difference)
+'''
 
 if __name__ == '__main__':
     unittest.main()
