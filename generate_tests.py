@@ -52,7 +52,7 @@ template_copy = copy.deepcopy(template)
 
 initial_transform = np.array([
     [0, 1, 0, 0],  
-    [1, 0, 0, 1],  
+    [1, 0, 0, 0],  
     [0, 0, 1, 0], 
     [0, 0, 0, 1]
 ])
@@ -95,8 +95,8 @@ noisy_pcd.points = o3d.utility.Vector3dVector(combined_points)
 
 matrix_inv = np.linalg.inv(initial_transform)
 
-# o3d.io.write_point_cloud("tests/hard/rotation_and_translation_med.pcd", noisy_pcd, write_ascii=True)
-# np.savetxt("tests/hard/rotation_and_translation_med_gt.txt", matrix_inv, fmt="%.6f")
+# o3d.io.write_point_cloud("tests/easy/rotation_easy.pcd", template_copy, write_ascii=True)
+# np.savetxt("tests/easy/rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
 template.paint_uniform_color([1, 0, 0])  # Red
 noisy_pcd.paint_uniform_color([0, 1, 0]) # Green

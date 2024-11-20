@@ -9,7 +9,7 @@ def draw_registration_result(source, target, transformation):
     target_temp.paint_uniform_color([0, 0.651, 0.929])
     source_temp.transform(transformation)
     # o3d.visualization.draw_geometries([source_temp, target_temp])
-    o3d.visualization.draw_geometries([target_temp, source_temp])
+    # o3d.visualization.draw_geometries([target_temp, source_temp])
 
 def icp(template_np, source_np):
     source = o3d.geometry.PointCloud()
@@ -19,7 +19,7 @@ def icp(template_np, source_np):
 
     # initial_transform = np.eye(4)
     initial_transform = np.array([
-    [0, -1, 0, 0.05],  
+    [0, 1, 0, 0.05],  
     [1, 0, 0, 1.4],  
     [0, 0, 1, 0.22], 
     [0, 0, 0, 1]])
@@ -30,7 +30,7 @@ def icp(template_np, source_np):
     #     template_pc, target_pc, threshold, initial_transform,
     #     o3d.pipelines.registration.TransformationEstimationPointToPoint()
     # )
-    draw_registration_result(source, target, initial_transform)
+    # draw_registration_result(source, target, initial_transform)
 
     print("Apply point-to-point ICP")
     reg_p2p = o3d.pipelines.registration.registration_icp(
