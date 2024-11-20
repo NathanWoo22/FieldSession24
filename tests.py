@@ -4,7 +4,7 @@ import numpy as np
 import generate_tests as rot_test
 import icp_algo as icp
 import icp_registration as icp_reg
-import icp_colored as icp_col
+import feature_matches as icp_col
 
 # Example function to test
 def add(a, b):

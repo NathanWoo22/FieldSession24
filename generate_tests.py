@@ -22,9 +22,9 @@ def generate_simple_rotation_test():
     template_copy = copy.deepcopy(template)
 
     initial_transform = np.array([
-        [0, 1, 0, 0],  
-        [1, 0, 0, 0],  
-        [0, 0, 1, 0], 
+        [0, 1, 0, 1],  
+        [1, 0, 0, 1],  
+        [0, 0, 1, 1], 
         [0, 0, 0, 1]])
 
     template_copy.transform(initial_transform)
