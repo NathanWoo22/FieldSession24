@@ -7,7 +7,7 @@ import icp_algo as icp
 from std_msgs.msg import Header
 from sensor_msgs_py import point_cloud2 
 import icp_registration as icp_reg
-import icp_colored as icp_col
+import feature_matches as icp_col
 import struct
 
 class PointCloudSubscriber(Node):

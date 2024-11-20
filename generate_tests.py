@@ -35,10 +35,16 @@ x = np.linspace(0, width, int(width * density))  # x-coordinates
 y = np.linspace(0, height, int(height * density))  # y-coordinates
 xx, yy = np.meshgrid(x, y)  # Create a grid
 z = np.zeros_like(xx)  # z-coordinate for a flat wall
-
 # Combine into (N, 3) point cloud
 points = np.vstack((xx.ravel(), yy.ravel(), z.ravel())).T
 '''
+
+initial_transform = np.array([
+    [0, 1, 0, 1],  
+    [1, 0, 0, 1],  
+    [0, 0, 1, 1], 
+    [0, 0, 0, 1]
+])
 
 template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
 
