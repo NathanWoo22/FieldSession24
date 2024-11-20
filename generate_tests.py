@@ -62,11 +62,13 @@ def generate_simple_translation_test():
     data_xyz = template_copy[:, :3]
     template_xyz = template[:, :3]
 
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_easy.pcd", template_copy, write_ascii=True)
+    np.savetxt("tests/translation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    #return template_xyz, data_xyz, initial_transform
 
 def generate_simple_translation_rotation_test():
 
@@ -88,8 +90,45 @@ def generate_simple_translation_rotation_test():
     data_xyz = template_copy[:, :3]
     template_xyz = template[:, :3]
 
-    #matrix_inv = np.linalg.inv(initial_transform)
+    matrix_inv = np.linalg.inv(initial_transform)
 
     o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_rotation_easy.pcd", template_copy, write_ascii=True)
+    np.savetxt("tests/translation_rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
 
-    return template_xyz, data_xyz, initial_transform
+    #return template_xyz, data_xyz, initial_transform
+
+def generate_rotation_translation_with_noise_test():
+
+    template = o3d.io.read_point_cloud("datasets/fiducial_plane.pcd") 
+
+    template_copy = copy.deepcopy(template)
+
+    initial_transform = np.array([
+        [0, 1, 0, 0],  
+        [1, 0, 0, 0],  
+        [0, 0, 1, 0], 
+        [0, 0, 0, 1]])
+
+    template_copy.transform(initial_transform)
+
+    points = np.asarray(template.points)
+    noise = np.random.normal(0, noise_std_dev = 0.01, points.shape)
+    noisy_points = points + noise
+
+    template_transformed_np = np.asarray(template_copy.points)
+    template_copy.write_point_cloud()
+
+    noisy_pcd = o3d.geometry.PointCloud()
+    noisy_pcd.points = o3d.utility.Vector3dVector(noisy_points)
+
+    data_xyz = noisy_pcd[:, :3]
+    template_xyz = template[:, :3]
+
+    matrix_inv = np.linalg.inv(initial_transform)
+
+    o3d.visualization.draw_geometries([template, template_copy])
+    o3d.io.write_point_cloud("tests/translation_rotation_easy.pcd", noisy_pcd, write_ascii=True)
+    np.savetxt("tests/translation_rotation_easy_gt.txt", matrix_inv, fmt="%.6f")
+
+    #return template_xyz, data_xyz, initial_transform
