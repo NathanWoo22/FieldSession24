@@ -10,8 +10,6 @@ def zfilter(array):
     fillArr = np.array([x for x in fillArr if x[1] >= 1.45])
 
     fillArr = np.array([x for x in fillArr if x[0] >= -0.2])
-    # testPoint = np.array([2.000,2.000,2.000])
-    # fillArr = np.append(fillArr, testPoint)
     return fillArr
 
 array = np.load("./datasets/small_scene26.npy")
@@ -25,4 +23,4 @@ draw = o3d.geometry.PointCloud()
 draw.points = o3d.utility.Vector3dVector(newArr)
 o3d.visualization.draw_geometries([draw])
 
-np.save("./datasets/gas_tank26.npy", newArr)
+# np.save("./datasets/gas_tank26.npy", newArr)

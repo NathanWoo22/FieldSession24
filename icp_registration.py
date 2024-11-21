@@ -17,15 +17,15 @@ def draw_registration_result(source, target, transformation):
     source_temp.transform(transformation)
     o3d.visualization.draw_geometries([target_temp, source_temp])
 
-def icp(template_np, source_np, initial_transform):
+def icp(template_np, source_np, initial_transform, threshold):
     source = o3d.geometry.PointCloud()
     target = o3d.geometry.PointCloud()
     source.points = o3d.utility.Vector3dVector(source_np)
     target.points = o3d.utility.Vector3dVector(template_np)
     # source.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamKNN(knn=30))
     target.estimate_normals(search_param=o3d.geometry.KDTreeSearchParamKNN(knn=30))
-
-    threshold = 1
+    
+    # threshold = 0.95
 
     # Perform ICP Point-to-Point registration   
     print("Apply point-to-point ICP")

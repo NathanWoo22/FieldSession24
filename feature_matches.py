@@ -2,6 +2,7 @@ import open3d as o3d
 import numpy as np
 import copy
 import icp_registration as icp_reg
+import alignment as al
 
 
 def draw_registration_result(source, target, transformation):
@@ -74,12 +75,34 @@ def icp(template_np, source_np):
     o3d.visualization.draw_geometries([scene, template])
 
     # Revert back to np array (not needed but have to change icp_reg)
-    template_np = np.asarray(template.points)
+    ransac_tank_np = np.asarray(template.points)
     scene_np = np.asarray(scene_original.points)
 
     # Calling icp_reg for fine alignment on cap template
     cap_template = np.load("./datasets/aligned_cap.npy")
-    icp_reg.icp(cap_template, scene_np, ransac_result.transformation)
+
+    template_file = np.load("./datasets/fiducial_plane.npz")
+    cap_np = template_file['point_cloud']
+    cap_np = cap_np[:, :3]
+
+    # template_original_np = np.asarray(template_original.points)
+    # cap_aligned = al.alignCap(template_original_np, cap_np)
+    # icp_reg.icp(cap_aligned, scene_np, ransac_result.transformation, 0.5)
+
+    template_original_np = np.asarray(template_original.points)
+    finished_tank_transform = icp_reg.icp(ransac_tank_np, scene_np, ransac_result.transformation, 0.5)
+    print("woohoo")
+    template.transform(finished_tank_transform)
+    template_original.transform(ransac_result.transformation)
+    template_original.transform(finished_tank_transform)
+    finished_tank_np = np.asarray(template_original.points)
+    cap_aligned = al.alignCap(finished_tank_np, cap_np)
+
+    finished_cap = o3d.geometry.PointCloud()
+    scene = o3d.geometry.PointCloud()
+    finished_cap.points = o3d.utility.Vector3dVector(cap_aligned)
+    scene.points = o3d.utility.Vector3dVector(scene_np)
+
     # return ransac_result.transformation, transformed_template_np
 
     # FGR Implementation for coarse alignment
@@ -112,7 +135,7 @@ def icp(template_np, source_np):
 
 def main(args=None):
     template = np.load("./datasets/gas_tank26.npy")
-    scene = np.load("./datasets/big_scene26.npy")
+    scene = np.load("./datasets/small_scene.npy")
     icp(template, scene)
 
 if __name__ == '__main__':
