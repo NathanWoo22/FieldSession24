@@ -1,9 +1,10 @@
 xhost local:docker
 docker run -it \
+ --name icpAlgo \
  -e DISPLAY=$DISPLAY \
  -v /tmp/.X11-unix:/tmp/.X11-unix \
  -v ~/.Xauthority:/root/.Xauthority:ro \
- -v ./scripts:/scripts:z \
+ -v ./:/scripts:z \
  -v ./datasets:/datasets:z \
  -v ./read_pcd.py:/read_pcd.py \
  -v ./icp_registration.py:/icp_registration.py \
