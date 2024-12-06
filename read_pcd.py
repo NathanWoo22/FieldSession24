@@ -9,7 +9,6 @@ from sensor_msgs_py import point_cloud2
 import algorithms.icp_registration as icp_reg
 import algorithms.feature_matches as feature_match
 import struct
-# import filtering as fi
 
 class PointCloudSubscriber(Node):
     def __init__(self):
@@ -33,7 +32,7 @@ class PointCloudSubscriber(Node):
         scene = pointcloud2_to_xyz_array(msg)
 
         # Load in tank and template files
-        cap_template = np.load("./datasets/aligned_cap.npy")
+        cap_template = np.load("./datasets/cap.npy")
         tank_template= np.load("./datasets/gas_tank26.npy")
 
         # Reformat the scene to only grab xyz data

@@ -1,7 +1,6 @@
 import open3d as o3d
 import numpy as np
 import copy
-import icp_registration as icp_reg
 
 
 def draw_registration_result(source, target, transformation):

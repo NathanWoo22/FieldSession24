@@ -9,6 +9,8 @@ Both approaches can be run via the command "python3 ./read_pcd.py" and will read
 Alorithms folder contains the python files of the algorithms we used. 
 Datasets folder contains the real world data we tested on. We have extra .npz files in here that we generated from the bag files to make testing our algorithms easier. 
 Startup folder contains a script that is ran on startup.
+Tests folder contains our generated dataset.
+
 Container can be started by running the run.sh script. Once run, there is a glitch that requires uninstalling numpy and reinstalling version 1.24.0.
 
 Sample run: 
