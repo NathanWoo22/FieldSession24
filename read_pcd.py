@@ -7,6 +7,7 @@ import icp_algo as icp
 from std_msgs.msg import Header
 from sensor_msgs_py import point_cloud2 
 import icp_registration as icp_reg
+import feature_matches as icp_col
 import struct
 
 class PointCloudSubscriber(Node):
@@ -41,8 +42,8 @@ class PointCloudSubscriber(Node):
         template_xyz = template[:, :3]
 
         # transformation, transformed_xyz = icp.icp(template_xyz, data_xyz)
-        transformation, transformed_xyz = icp_reg.icp(template_xyz, data_xyz)
-        # transformation, transformed_xyz = icp.icp(template_xyz, data_xyz)
+        # transformation, transformed_xyz = icp_reg.icp(template_xyz, data_xyz)
+        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
 
         print(data_xyz.shape)
         print(transformed_xyz.shape)
