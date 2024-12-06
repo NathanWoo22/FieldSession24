@@ -16,5 +16,7 @@ Container can be started by running the run.sh script. Once run, there is a glit
 Sample run: 
 
 `ros2 bag play datasets/rosbag2_2024_06_26_21_42_35-automated_refuel_session/rosbag2_2024_06_26_21_42_35-automated_refuel_session_0.mcap -l`
+
 `rviz`
+
 `python3 read_pcd.py`
