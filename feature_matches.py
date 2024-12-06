@@ -79,26 +79,10 @@ def icp(template_np, source_np):
 
     # Calling icp_reg for fine alignment on cap template
     cap_template = np.load("./datasets/aligned_cap.npy")
-    icp_reg.icp(cap_template, scene_np, ransac_result.transformation)
-    # return ransac_result.transformation, transformed_template_np
+    final_transformation, final_transformed_template = icp_reg.icp(cap_template, scene_np, ransac_result.transformation)
+    return final_transformation, final_transformed_template
 
-    # FGR Implementation for coarse alignment
-    # print("running fgr")
-    # fgr_result = o3d.pipelines.registration.registration_fgr_based_on_feature_matching(
-    # template, scene, template_fpfh, scene_fpfh,
-    # o3d.pipelines.registration.FastGlobalRegistrationOption(
-    #     maximum_correspondence_distance=distance_threshold))
-    # template.transform(fgr_result.transformation)
-    # transformed_template_np = np.asarray(template.points)
-    # return fgr_result.transformation, transformed_template_np
-
-    # ICP for fine alignment
-    # icp_result = o3d.pipelines.registration.registration_icp(
-    #     template, scene, distance_threshold, ransac_result.transformation,
-    #     o3d.pipelines.registration.TransformationEstimationPointToPoint()
-    # )
-
-    # Return data
+    # Return data (uncomment for testing)
     # print("ICP Transformation:\n", icp_result.transformation)
     # # Apply the final transformation to the template for visualization
     # template.transform(icp_result.transformation)
@@ -110,10 +94,3 @@ def icp(template_np, source_np):
     # transformed_template_np = np.asarray(template.points)
     # return icp_result.transformation, transformed_template_np
 
-def main(args=None):
-    template = np.load("./datasets/gas_tank26.npy")
-    scene = np.load("./datasets/big_scene26.npy")
-    icp(template, scene)
-
-if __name__ == '__main__':
-    main()

@@ -40,8 +40,7 @@ def icp(template_np, source_np, initial_transform):
     draw_registration_result(target, source, reg_p2p.transformation)
     target.transform(reg_p2p.transformation)
     transformed_template_np = np.asarray(target.points)
-    return reg_p2p.transformation # change to below when reverted to ros
-    # return reg_p2p.transformation, transformed_template_np
+    return reg_p2p.transformation, transformed_template_np
 
     # Perform ICP Point-to-Plane registration 
     # print("Apply point-to-plane ICP")
