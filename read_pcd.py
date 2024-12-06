@@ -3,11 +3,11 @@ import rclpy
 from rclpy.node import Node
 import numpy as np
 from sensor_msgs.msg import PointCloud2
-import icp_algo as icp
+import algorithms.icp_algo as icp
 from std_msgs.msg import Header
 from sensor_msgs_py import point_cloud2 
-import icp_registration as icp_reg
-import feature_matches as icp_col
+import algorithms.icp_registration as icp_reg
+import algorithms.feature_matches as feature_match
 import struct
 # import filtering as fi
 
@@ -30,23 +30,22 @@ class PointCloudSubscriber(Node):
         self.get_logger().info('Received PointCloud2 data')
         self.get_logger().info(f'Width: {msg.width}, Height: {msg.height}, Fields: {len(msg.fields)}, Data Length: {len(msg.data)}')
 
-        data_raw = np.array(msg.data)
-        data = data_raw.reshape(-1, 5)
-        data = pointcloud2_to_xyz_array(msg)
+        scene = pointcloud2_to_xyz_array(msg)
 
-        template_file = np.load("./datasets/fiducial_plane.npz")
-        template = template_file['point_cloud']
+        # Load in tank and template files
+        cap_template = np.load("./datasets/aligned_cap.npy")
+        tank_template= np.load("./datasets/gas_tank26.npy")
 
-        data_xyz = data[:, :3]
-        template_xyz = template[:, :3]
-        
-        # transformation, transformed_xyz = icp.icp(template_xyz, data_xyz)
-        # transformation, transformed_xyz = icp_reg.icp(template_xyz, data_xyz)
-        transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
-        
-        print(data_xyz.shape)
-        print(transformed_xyz.shape)
-        transformed_pcd2 = create_pointcloud2_from_xyz(np_points = transformed_xyz)
+        # Reformat the scene to only grab xyz data
+        scene_xyz = scene[:, :3]
+
+        # Run the feature matching algorithm for good inital guess
+        transformation, transformed_tank_template = feature_match.feature_matching(tank_template, scene_xyz)
+
+        # Run ICP for fine tune of the template with the ransac as good inital guess
+        transformation, transformed_cap_template =icp_reg.icp(cap_template, scene_xyz, transformation)
+
+        transformed_pcd2 = create_pointcloud2_from_xyz(np_points = transformed_cap_template)
         self.publisher.publish(transformed_pcd2)
         self.get_logger().info('Published PointCloud2 message to /transformed_template')
 
