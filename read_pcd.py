@@ -9,6 +9,7 @@ from sensor_msgs_py import point_cloud2
 import icp_registration as icp_reg
 import feature_matches as icp_col
 import struct
+# import filtering as fi
 
 class PointCloudSubscriber(Node):
     def __init__(self):
@@ -36,15 +37,13 @@ class PointCloudSubscriber(Node):
         template_file = np.load("./datasets/fiducial_plane.npz")
         template = template_file['point_cloud']
 
-        print(template.shape)
-
         data_xyz = data[:, :3]
         template_xyz = template[:, :3]
-
+        
         # transformation, transformed_xyz = icp.icp(template_xyz, data_xyz)
         # transformation, transformed_xyz = icp_reg.icp(template_xyz, data_xyz)
         transformation, transformed_xyz = icp_col.icp(template_xyz, data_xyz)
-
+        
         print(data_xyz.shape)
         print(transformed_xyz.shape)
         transformed_pcd2 = create_pointcloud2_from_xyz(np_points = transformed_xyz)
