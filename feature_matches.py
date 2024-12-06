@@ -40,7 +40,7 @@ def icp(template_np, source_np):
 
     print("running ransac")
     # RANSAC Registration for coarse alignment
-    distance_threshold = 0.4
+    distance_threshold = 0.04
     ransac_result = o3d.pipelines.registration.registration_ransac_based_on_feature_matching(
         template, scene, template_fpfh, scene_fpfh,
         mutual_filter=False,

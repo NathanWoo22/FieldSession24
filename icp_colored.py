@@ -61,7 +61,7 @@ def icp(template_np, source_np):
     print("ICP Transformation:\n", icp_result.transformation)
     # Apply the final transformation to the template for visualization
     template.transform(icp_result.transformation)
-    o3d.visualization.draw_geometries([scene, template])
+    # o3d.visualization.draw_geometries([scene, template])
     print(icp_result)
     print("Transformation is:")
     print(icp_result.transformation)
