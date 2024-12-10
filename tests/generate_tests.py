@@ -110,8 +110,8 @@ noisy_pcd.points = o3d.utility.Vector3dVector(combined_points)
 
 matrix_inv = np.linalg.inv(initial_transform)
 
-o3d.io.write_point_cloud("tests/easy/nothing_done.pcd", template_copy, write_ascii=True)
-np.savetxt("tests/easy/nothing_done_gt.txt", matrix_inv, fmt="%.6f")
+o3d.io.write_point_cloud("template.pcd", template_copy, write_ascii=True)
+# np.savetxt("tests/easy/nothing_done_gt.txt", matrix_inv, fmt="%.6f")
 
 template.paint_uniform_color([1, 0, 0])  # Red
 noisy_pcd.paint_uniform_color([0, 1, 0]) # Green
